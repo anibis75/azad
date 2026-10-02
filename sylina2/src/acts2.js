@@ -457,7 +457,7 @@ export function buildScript(K) {
       place(B(), a.x - 14, a.z + 10, 1.4, 'slideBrake', 18); tw(B(), 'x', a.x - 1.1, 0.75, 'in', 'world'); tw(B(), 'z', a.z + 0.5, 0.75, 'in', 'world'); tw(B(), 'y', 0, 0.75, 'in', 'world');
       AU.play('shatter', { vol: 0.8, rate: 1.4 }); AU.SFX.whoosh(1.2, 0.8); cut([a.x + 4, 1.2, a.z + 6], [a.x - 4, 5, a.z + 3], 46, 0.06);
     });
-    T(t(54.7), () => { B().faceTo(Y()); B().to('blockHigh', 0.05); Y().to('cutDown', 0.05); clashS(Y(), B(), 2.4); PW.iceTime(pos(A()), 1.4, 2.2, 0.25); later(0.6, () => (K.SW.list.forEach(s => { if (s.state === 'stuck') s.st = 1.4; }))); shot(rel(B, 2.2, 1.0, 2.0, 0, 1.4, 0.6, 34, 0.05)); });
+    T(t(54.7), () => { B().faceTo(Y()); B().to('blockHigh', 0.05); Y().to('cutDown', 0.05); clashS(Y(), B(), 2.4); PW.iceTime(pos(A()), 1.4, 2.2, 0.25); later(0.6, () => (K.SW.list.forEach(s => { if (s.state === 'stuck') s.st = 1.4; }))); cut([A().x + 5.5, 2.4, A().z + 6], [A().x - 0.4, 1.2, A().z], 40, 0.05); });
     T(t(55.3), () => { PW.iceAge(pos(B()), 7, 0.6, 0, 30); knock(Y(), pos(B()), 3, 0.5); });
     line(t(56.2), 'Y', 'y_ochinasai', '落ちなさい。', '« Tombez. »', 1.8, 0.2);
     T(t(56.4), () => { Y().to('castPalm', 0.2); Y().openL = true; PW.blackHole(v((A().x + B().x) / 2, 0, (A().z + B().z) / 2), 5, 3, 0.5); DV.circle(ST.circleTex, v((A().x + B().x) / 2, 0.05, (A().z + B().z) / 2), 0xa040ff, 12, 3); AU.play('imu_seal', { vol: 1 }); cut([0, 12, A().z + 8], [A().x, 0, A().z], 52, 0.1); });

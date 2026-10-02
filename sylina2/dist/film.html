@@ -48138,7 +48138,7 @@ uniform float uTime, uPulse; varying vec3 vW; void main(){ float d = length(vW.x
         later2(0.6, () => K.SW.list.forEach((s) => {
           if (s.state === "stuck") s.st = 1.4;
         }));
-        shot(rel(B2, 2.2, 1, 2, 0, 1.4, 0.6, 34, 0.05));
+        cut([A2().x + 5.5, 2.4, A2().z + 6], [A2().x - 0.4, 1.2, A2().z], 40, 0.05);
       });
       T2(t(55.3), () => {
         PW2.iceAge(pos(B2()), 7, 0.6, 0, 30);
