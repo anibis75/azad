@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>虚神ノ逆襲</title>
+<style>
+  @font-face{font-family:"Yuji Syuku";src:url(../fonts/YujiSyuku-Regular.ttf)}
+  @font-face{font-family:"Shippori Mincho B1";font-weight:800;src:url(../fonts/ShipporiMinchoB1-ExtraBold.ttf)}
+  @font-face{font-family:Bangers;src:url(../fonts/Bangers-Regular.ttf)}
+  @font-face{font-family:"Zen Kaku Gothic New";font-weight:900;src:url(../fonts/ZenKakuGothicNew-Black.ttf)}
+  @font-face{font-family:"Zen Kaku Gothic New";font-weight:500;src:url(../fonts/ZenKakuGothicNew-Medium.ttf)}
+  :root{--red:#ff2448;--blue:#3f6bff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#000;overflow:hidden;color:#fff;font-family:"Zen Kaku Gothic New",system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+  #stage canvas{position:fixed;inset:0;width:100%!important;height:100%!important;display:block}
+  .bar{position:fixed;left:0;right:0;height:8.5vh;background:#000;z-index:4;pointer-events:none}
+  #barT{top:0} #barB{bottom:0}
+  #banner{position:fixed;left:0;right:0;top:16vh;z-index:7;text-align:center;pointer-events:none;opacity:0;--c:#fff}
+  #banner .k{font-family:"Shippori Mincho B1",serif;font-size:clamp(44px,8.5vw,120px);font-weight:800;letter-spacing:.12em;color:#fff;
+    text-shadow:0 0 18px var(--c),0 0 50px var(--c),0 4px 0 #000}
+  #banner .f{font-family:Bangers,Impact,sans-serif;font-size:clamp(20px,3.2vw,40px);letter-spacing:.3em;margin-top:6px;color:var(--c);text-shadow:0 0 12px var(--c),0 2px 0 #000}
+  #banner.show{animation:bIn 2.6s cubic-bezier(.2,.9,.3,1) forwards}
+  @keyframes bIn{0%{opacity:0;transform:scale(1.9);filter:blur(14px)}9%{opacity:1;transform:scale(1);filter:blur(0)}80%{opacity:1}100%{opacity:0;transform:scale(1.05);filter:blur(4px)}}
+  #sub{position:fixed;left:0;right:0;bottom:10.5vh;z-index:7;text-align:center;pointer-events:none;padding:0 16px;font-size:clamp(16px,2.3vw,26px);font-weight:500;
+    text-shadow:0 2px 0 #000,0 0 12px #000;opacity:0;transition:opacity .3s}
+  #sub b{font-family:Bangers,Impact,sans-serif;font-weight:400;letter-spacing:.12em;margin-right:12px}
+  #sub.show{opacity:1}
+  #sub .jp{font-family:"Shippori Mincho B1",serif;font-weight:800;font-size:1.25em;letter-spacing:.06em}
+  #sub small{display:block;font-size:.72em;opacity:.9;margin-top:4px;letter-spacing:.02em}
+  #crack{position:fixed;inset:0;width:100%;height:100%;z-index:5;pointer-events:none;opacity:0;mix-blend-mode:screen}
+  #rew{position:fixed;left:6vw;top:12vh;z-index:7;font-family:Bangers,Impact,sans-serif;font-size:clamp(28px,5vw,64px);letter-spacing:.1em;color:#fff;opacity:0;text-shadow:3px 0 #ff2448,-3px 0 #3fd0ff}
+    #credits{position:fixed;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:100vh;gap:3.2vh;pointer-events:none;opacity:0;text-align:center;color:#e8e4ee;font-size:clamp(12px,2.2vh,22px);letter-spacing:.08em}
+  @keyframes roll{from{transform:translateY(0)}to{transform:translateY(-190vh)}}
+  #credits h3{font-family:"Yuji Syuku",serif;font-size:clamp(28px,6vh,64px);font-weight:400;letter-spacing:.1em;color:#fff;text-shadow:0 0 20px #3f7bff}
+  #credits .r{display:grid;gap:.6vh} #credits .r b{font-family:Bangers,Impact,sans-serif;font-weight:400;letter-spacing:.14em;font-size:1.3em}
+  #credits small{opacity:.7;font-size:.8em;max-width:70ch;line-height:1.6}
+  #title{position:fixed;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4vh;pointer-events:none;opacity:0}
+  #title .k{font-family:"Yuji Syuku",serif;font-size:clamp(60px,15vh,190px);letter-spacing:.08em;color:#fff;text-shadow:0 0 30px #d9a8ff,0 0 80px #a040ff,0 6px 0 #000}
+  #title .f{font-family:"Zen Kaku Gothic New",sans-serif;font-weight:500;font-size:clamp(12px,2.4vh,26px);letter-spacing:.45em;color:#dfe6ff;text-shadow:0 2px 0 #000}
+  #title .c{font-family:Bangers,Impact,sans-serif;font-size:clamp(22px,5vh,56px);letter-spacing:.14em;text-shadow:3px 3px 0 #000}
+  #title .c i{font-style:normal;color:#fff;opacity:.6;margin:0 .5em}
+  #title.show{animation:tIn 3.2s cubic-bezier(.2,.9,.3,1) forwards}
+  @keyframes tIn{0%{opacity:0;transform:scale(1.6);filter:blur(16px)}10%{opacity:1;transform:scale(1);filter:blur(0)}100%{opacity:1;transform:scale(1.04)}}
+  #cap{position:fixed;left:0;right:0;top:12vh;z-index:7;text-align:center;pointer-events:none;font-family:"Shippori Mincho B1",serif;font-size:clamp(16px,2.6vw,28px);letter-spacing:.45em;
+    color:#e6ecff;text-shadow:0 0 14px #8ba4ff;opacity:0;transition:opacity .6s}
+  #cap.show{opacity:1}
+  .nm{position:fixed;bottom:24vh;z-index:7;pointer-events:none;opacity:0;transition:opacity .5s}
+  .nm .n{font-family:Bangers,Impact,sans-serif;font-size:clamp(34px,6vw,76px);letter-spacing:.08em;line-height:1}
+  .nm .t{font-size:clamp(11px,1.5vw,16px);letter-spacing:.35em;text-transform:uppercase;opacity:.9;margin-top:4px}
+  .nm .j{font-family:"Shippori Mincho B1",serif;font-size:clamp(14px,2vw,22px);letter-spacing:.3em;opacity:.8}
+  #nA{left:6vw} #nA .n{color:#6f9bff;text-shadow:0 0 22px rgba(63,123,255,.9),3px 3px 0 #000}
+  #nB{left:6vw} #nB .n{color:#9aeaff;text-shadow:0 0 22px rgba(120,220,255,.8),3px 3px 0 #000}
+  #nY{right:6vw;text-align:right} #nY .n{color:#b877ff;text-shadow:0 0 22px rgba(160,64,255,.8),3px 3px 0 #000}
+  .nm.show{opacity:1;transform:none}
+  #onos{position:fixed;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+  .ono{position:absolute;transform:translate(-50%,-50%) rotate(var(--r));font-family:"Zen Kaku Gothic New",sans-serif;font-weight:900;white-space:nowrap;
+    -webkit-text-stroke:.08em #000;paint-order:stroke fill;text-shadow:0 0 .3em rgba(0,0,0,.6);animation:ono 1.3s ease-out forwards}
+  @keyframes ono{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--r)) scale(.3)}10%{opacity:1;transform:translate(-50%,-50%) rotate(var(--r)) scale(1.25)}
+    22%{transform:translate(-50%,-50%) rotate(var(--r)) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-58%) rotate(var(--r)) scale(1.05)}}
+  #panels{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .2s}
+  #panels div{position:absolute;left:0;right:0;height:24vh;border-top:3px solid #fff;border-bottom:3px solid #fff;box-shadow:inset 0 0 60px rgba(0,0,0,.7)}
+  #panels .p1{top:11.5vh} #panels .p2{top:38vh} #panels .p3{top:64.5vh}
+  #start,#end,#loading{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:16px;text-align:center;transition:opacity .8s}
+  #start{background:radial-gradient(circle at 22% 50%,rgba(255,36,72,.28),transparent 45%),radial-gradient(circle at 78% 50%,rgba(63,107,255,.28),transparent 45%),rgba(4,2,8,.92)}
+  #start.hide,#loading.hide{opacity:0;pointer-events:none}
+  #loading{z-index:11;background:#050308;font-size:14px;letter-spacing:.3em;color:#99a}
+  .vs{display:flex;align-items:center;gap:clamp(12px,4vw,56px);flex-wrap:wrap;justify-content:center}
+  .vs .c{font-family:Bangers,Impact,sans-serif;font-size:clamp(38px,7.5vw,92px);letter-spacing:.06em;line-height:1}
+  .vs .c small{display:block;font-family:"Zen Kaku Gothic New",sans-serif;font-size:clamp(10px,1.4vw,14px);letter-spacing:.35em;opacity:.85;margin-top:8px}
+  .vs .a{color:var(--red);text-shadow:0 0 26px rgba(255,36,72,.8),4px 4px 0 #000}
+  .vs .b{color:#6f8fff;text-shadow:0 0 26px rgba(63,107,255,.8),4px 4px 0 #000}
+  .vs .x{font-family:Bangers,Impact,sans-serif;font-size:clamp(44px,8vw,100px);font-style:italic;text-shadow:0 0 22px #fff}
+  h2.tt{font-family:"Shippori Mincho B1",serif;font-size:clamp(16px,2.2vw,22px);letter-spacing:.7em;color:#ccc;font-weight:800}
+  button.go{font-family:Bangers,Impact,sans-serif;font-size:clamp(22px,4vw,34px);letter-spacing:.14em;padding:14px 40px;color:#fff;background:#0a0306;
+    border:2px solid #fff;border-radius:3px;cursor:pointer;box-shadow:-10px 0 34px rgba(255,36,72,.6),10px 0 34px rgba(63,107,255,.6);transition:transform .15s,opacity .3s}
+  button.go:hover{transform:scale(1.06)} button.go:disabled{opacity:.35;cursor:wait}
+  .hint{color:#99a;font-size:13px;letter-spacing:.06em}
+  .rot{display:none;color:#dde}
+  @media (orientation: portrait){.rot{display:block}}
+  #end{opacity:0;pointer-events:none;background:#000}
+  #end.show{opacity:1;pointer-events:auto}
+  #end .fin{font-family:"Shippori Mincho B1",serif;font-size:clamp(60px,12vw,150px);letter-spacing:.3em;text-shadow:-6px 0 34px rgba(255,36,72,.8),6px 0 34px rgba(63,107,255,.8)}
+  #end .cr{font-size:11px;color:#667;letter-spacing:.05em;max-width:760px;line-height:1.6}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div class="bar" id="barT"></div><div class="bar" id="barB"></div>
+<div id="panels"><div class="p1"></div><div class="p2"></div><div class="p3"></div></div>
+<canvas id="crack"></canvas>
+<div id="rew">◀◀ REW</div>
+<div id="onos"></div>
+<div id="banner"><div class="k"></div><div class="f"></div></div>
+<div id="cap"></div>
+<div id="sub"></div>
+<div class="nm" id="nA"><div class="j">ヤミヤミ ・ 拳骨</div><div class="n">AZAD</div><div class="t">Ténèbres de Barbe Noire · poing de Garp</div></div>
+<div class="nm" id="nB"><div class="j">ヒエヒエの実 ・ 氷</div><div class="n">REMI</div><div class="t">Fruit du Gel · la glace d'Aokiji</div></div>
+<div class="nm" id="nY"><div class="j">神の騎士団 ・ 虚神</div><div class="n">SYLINA</div><div class="t">Chevalier divin · héritière d'Imu</div></div>
+<div id="credits">
+  <h3>虚神ノ逆襲</h3>
+  <div class="r">KYOSHIN NO GYAKUSHŪ — PARTIE II · LA REVANCHE DE SYLINA</div>
+  <div class="r"><b style="color:#b877ff">SYLINA</b>神の騎士団 · Chevalier divin, héritière d'Imu</div>
+  <div class="r"><b style="color:#6f9bff">AZAD</b>ヤミヤミ · Ténèbres de Barbe Noire · poing de Garp</div>
+  <div class="r"><b style="color:#9aeaff">REMI</b>ヒエヒエ · la glace d'Aokiji</div>
+  <div class="r"><b>VOIX</b>VOICEVOX:冥鳴ひまり · VOICEVOX:青山龍星 · VOICEVOX:麒ヶ島宗麟</div>
+  <div class="r"><b>MUSIQUE (CC0)</b><small>« Dark Chant » · « Epic Rock » · « QaziJamJam » Emma_MA · « Epic Endgame Cinematic » cynicmusic · « Eclipse Legion » vitalezzz · « Scene Orchestral » — OpenGameArt</small></div>
+  <div class="r"><b>PERSONNAGES</b><small>Modèles VRoid Studio (pixiv, CC0), recolorés · Bruitages CC0 : BigSoundBank, Kenney, OpenGameArt</small></div>
+  <div class="r"><b>MOTEUR</b><small>three.js + three-vrm, rendu image par image</small></div>
+  <div class="r"><small>Fan-film non commercial inspiré de One Piece — projet de groupe.</small></div>
+  <h3 style="margin-top:8vh">終</h3>
+</div>
+<div id="title"><div class="k">虚神ノ逆襲</div><div class="f">PARTIE II — LA REVANCHE DE SYLINA</div><div class="c"><span style="color:#b877ff">SYLINA</span><i>·</i><span style="color:#6f9bff">AZAD</span><i>·</i><span style="color:#9aeaff">REMI</span></div></div>
+<div id="start">
+  <h2 class="tt">覇王の決闘</h2>
+  <div class="vs">
+    <div class="c a">KUROGANE<small>Le Roi Écarlate</small></div>
+    <div class="x">VS</div>
+    <div class="c b">SHIRANUI<small>La Tempête d'Azur</small></div>
+  </div>
+  <button class="go" id="go" disabled>⚔ Commencer le duel</button>
+  <div class="hint rot">📱 Sur téléphone : tourne-le à l'horizontale pour un meilleur rendu</div>
+  <div class="hint">🔊 Son à fond, casque conseillé · plein écran (F11) · ~57 s · WebGL requis</div>
+</div>
+<div id="loading"><div id="loadtxt">Initialisation…</div></div>
+<div id="end">
+  <div class="fin">終</div>
+  <button class="go" id="again">↻ Revoir le duel</button>
+  <div class="cr">Personnages : VRoid Studio sample models « Sakurada Fumiriya » et « HairSample_Male » (pixiv, CC0) · Sons : OpenGameArt / Kenney (CC0) · Musique : « Battle Theme A » par cynicmusic (CC0) · Moteur : three.js + three-vrm</div>
+</div>
+<!--ASSETS-->
+<script>/*BUNDLE*/</script>
+</body>
+</html>
